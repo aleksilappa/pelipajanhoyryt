@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelipajan Höyryt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --steam-dark:    #1b2838;
+      --steam-darker:  #171a21;
+      --steam-panel:   #16202d;
+      --steam-blue:    #66c0f4;
+      --steam-blue-dim:#2a475e;
+      --steam-text:    #c6d4df;
+      --steam-muted:   #8f98a0;
+      --steam-green:   #4c6b22;
+      --steam-green2:  #75b022;
+      --steam-hover:   #2a475e;
+      --steam-border:  #2a475e;
+    }
+
+    body {
+      background: var(--steam-darker);
+      color: var(--steam-text);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--steam-darker);
+      border-bottom: 1px solid var(--steam-border);
+      padding: 10px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .navbar-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .navbar-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .navbar-sub {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--steam-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: var(--steam-darker);
+      border-right: 1px solid var(--steam-border);
+    }
+    .sidebar-header {
+      padding: 16px 20px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--steam-muted);
+      border-bottom: 1px solid var(--steam-border);
+    }
+    .game-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+    .game-row:hover, .game-row.active {
+      background: var(--steam-hover);
+      border-left-color: var(--steam-blue);
+    }
+    .game-row-thumb {
+      width: 90px;
+      height: 50px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--steam-panel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--steam-muted);
+      font-size: 11px;
+      text-align: center;
+      padding: 4px;
+      line-height: 1.3;
+    }
+    .game-row-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .game-row-info {
+      padding: 8px 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    .game-row-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--steam-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .game-row-genre {
+      font-size: 11px;
+      color: var(--steam-muted);
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      background: var(--steam-dark);
+      overflow-y: auto;
+    }
+
+    /* ── PAGE: LIBRARY (default) ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .library-hero {
+      background: var(--steam-panel);
+      padding: 40px 40px 30px;
+      border-bottom: 1px solid var(--steam-border);
+    }
+    .library-hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .library-hero p {
+      color: var(--steam-muted);
+      font-size: 14px;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+    .library-grid {
+      padding: 32px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .library-card {
+      background: var(--steam-panel);
+      border: 1px solid var(--steam-border);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+      overflow: hidden;
+    }
+    .library-card:hover {
+      border-color: var(--steam-blue);
+      transform: translateY(-2px);
+    }
+    .library-card-img {
+      width: 100%;
+      height: 110px;
+      background: var(--steam-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--steam-muted);
+      font-size: 12px;
+      object-fit: cover;
+    }
+    .library-card-body { padding: 10px 12px; }
+    .library-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--steam-text);
+    }
+    .library-card-genre {
+      font-size: 11px;
+      color: var(--steam-muted);
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+
+    /* ── PAGE: INFO ── */
+    .info-hero-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      background: var(--steam-panel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--steam-muted);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    .info-body {
+      padding: 28px 40px 40px;
+      max-width: 860px;
+    }
+    .info-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--steam-border);
+      color: var(--steam-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .info-back:hover { color: var(--steam-text); border-color: var(--steam-blue); }
+    .info-title {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .info-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tag {
+      background: var(--steam-hover);
+      color: var(--steam-blue);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .info-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--steam-text);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    /* Controls box */
+    .controls-box {
+      background: var(--steam-panel);
+      border: 1px solid var(--steam-border);
+      border-radius: 4px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+    .controls-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--steam-muted);
+      margin-bottom: 12px;
+    }
+    .controls-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+    .key {
+      background: var(--steam-darker);
+      border: 1px solid var(--steam-border);
+      color: var(--steam-text);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      white-space: nowrap;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
+    }
+    .controls-action { color: var(--steam-muted); font-size: 13px; }
+
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(to bottom, #75b022, #4c6b22);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+    .play-btn:hover { filter: brightness(1.15); }
+
+    /* ── PAGE: GAME ── */
+    .game-page { position: relative; }
+    .game-topbar {
+      background: var(--steam-darker);
+      border-bottom: 1px solid var(--steam-border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .game-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--steam-border);
+      color: var(--steam-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 5px 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .game-back-btn:hover { color: var(--steam-text); border-color: var(--steam-blue); }
+    .game-topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--steam-text);
+    }
+    .game-frame-wrap {
+      width: 100%;
+      height: calc(100vh - 65px - 49px);
+      background: #000;
+    }
+    .game-frame-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--steam-darker); }
+    ::-webkit-scrollbar-thumb { background: var(--steam-blue-dim); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <img class="navbar-logo" src="pelipajanlogo.png" alt="Pelipajan logo">
+  <div class="navbar-text">
+    <span class="navbar-title">Pelipajan Höyryt</span>
+    <span class="navbar-sub">Student Game Showcase</span>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">Pelikirjasto &mdash; 5 peliä</div>
+
+    <a class="game-row" onclick="showInfo('pakohuone')" href="#">
+      <div class="game-row-thumb">
+        <!-- Korvaa src omalla capsule-kuvalla: images/pakohuone-capsule.jpg -->
+        <span>KUVA<br>TULOSSA</span>
+      </div>
+      <div class="game-row-info">
+        <div class="game-row-title">Pakohuone (BETA)</div>
+        <div class="game-row-genre">Seikkailu</div>
+      </div>
+    </a>
+
+    <a class="game-row" onclick="showInfo('egg')" href="#">
+      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-info">
+        <div class="game-row-title">EGG</div>
+        <div class="game-row-genre">Tasohyppely</div>
+      </div>
+    </a>
+
+    <a class="game-row" onclick="showInfo('jahvat')" href="#">
+      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-info">
+        <div class="game-row-title">Jahvat tulloo</div>
+        <div class="game-row-genre">Selviytyminen</div>
+      </div>
+    </a>
+
+    <a class="game-row" onclick="showInfo('ltdc')" href="#">
+      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-info">
+        <div class="game-row-title">LTDC</div>
+        <div class="game-row-genre">Roguelike</div>
+      </div>
+    </a>
+
+    <a class="game-row" onclick="showInfo('rooffighter')" href="#">
+      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-info">
+        <div class="game-row-title">Roof Fighter</div>
+        <div class="game-row-genre">Tappelupeli</div>
+      </div>
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- PAGE: LIBRARY -->
+    <div class="page active" id="page-library">
+      <div class="library-hero">
+        <h1>Tervetuloa</h1>
+        <p>Pelipaja-valinnaisen oppilaiden tekemät pelit &mdash; valitse peli vasemmalta tai alta.</p>
+      </div>
+      <div class="library-grid">
+
+        <div class="library-card" onclick="showInfo('pakohuone')">
+          <div class="library-card-img">KUVA TULOSSA</div>
+          <div class="library-card-body">
+            <div class="library-card-title">Pakohuone (BETA)</div>
+            <div class="library-card-genre">Seikkailu</div>
+          </div>
+        </div>
+
+        <div class="library-card" onclick="showInfo('egg')">
+          <div class="library-card-img">KUVA TULOSSA</div>
+          <div class="library-card-body">
+            <div class="library-card-title">EGG</div>
+            <div class="library-card-genre">Tasohyppely</div>
+          </div>
+        </div>
+
+        <div class="library-card" onclick="showInfo('jahvat')">
+          <div class="library-card-img">KUVA TULOSSA</div>
+          <div class="library-card-body">
+            <div class="library-card-title">Jahvat tulloo</div>
+            <div class="library-card-genre">Selviytyminen</div>
+          </div>
+        </div>
+
+        <div class="library-card" onclick="showInfo('ltdc')">
+          <div class="library-card-img">KUVA TULOSSA</div>
+          <div class="library-card-body">
+            <div class="library-card-title">LTDC</div>
+            <div class="library-card-genre">Roguelike</div>
+          </div>
+        </div>
+
+        <div class="library-card" onclick="showInfo('rooffighter')">
+          <div class="library-card-img">KUVA TULOSSA</div>
+          <div class="library-card-body">
+            <div class="library-card-title">Roof Fighter</div>
+            <div class="library-card-genre">Tappelupeli</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PAGE: INFO -->
+    <div class="page" id="page-info">
+      <div class="info-hero-img" id="info-hero">KUVA TULOSSA</div>
+      <div class="info-body">
+        <button class="info-back" onclick="showLibrary()">&#8592; Takaisin kirjastoon</button>
+        <div class="info-title" id="info-title"></div>
+        <div class="info-tags" id="info-tags"></div>
+        <div class="info-desc" id="info-desc"></div>
+        <div class="controls-box">
+          <div class="controls-title">Ohjaus</div>
+          <div class="controls-list" id="info-controls"></div>
+        </div>
+        <button class="play-btn" onclick="playGame()">&#9654; Pelaa nyt</button>
+      </div>
+    </div>
+
+    <!-- PAGE: GAME -->
+    <div class="page" id="page-game">
+      <div class="game-topbar">
+        <button class="game-back-btn" onclick="showInfo(null)">&#8592; Takaisin</button>
+        <span class="game-topbar-title" id="game-title"></span>
+      </div>
+      <div class="game-frame-wrap">
+        <iframe id="game-iframe" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const games = {
+    pakohuone: {
+      title: 'Pakohuone (BETA)',
+      genre: ['Seikkailu', 'Point & Click', 'Beta'],
+      folder: 'pakopeli',
+      desc: 'Löydät itsesi lukitusta huoneesta ilman muistoja siitä, miten sinne päädyit. Tutki ympäristöäsi tarkasti, etsi vihjeitä ja ratkaise arvoituksia — ainoa tavoitteesi on päästä ulos. Peli on ensimmäisen persoonan point-and-click-seikkailu, jossa jokainen yksityiskohta saattaa olla avain vapauteen.',
+      controls: [
+        { key: 'Hiiri', action: 'Kaikki toiminnot — tutki, klikkaa, ratkaise' }
+      ]
+    },
+    egg: {
+      title: 'EGG',
+      genre: ['Tasohyppely', '2D', 'Speedrun'],
+      folder: 'EGG',
+      desc: 'EGG on vauhdikas 2D-tasohyppely, joka on suunniteltu nopeaa läpipeluuta ja speedrun-kisailua varten. Jokainen sekunti on tärkeä — hioa reittiäsi, opettele tasot ulkoa ja lyö ennätyksesi. Yksinkertainen ulkoasu piilottaa alleen tarkat kenttäsuunnitelmat, jotka palkitsevat harjoittelun.',
+      controls: [
+        { key: '← →', action: 'Liikkuminen' },
+        { key: 'Spacebar', action: 'Hyppäys' },
+        { key: 'F', action: 'Miekalla lyönti' }
+      ]
+    },
+    jahvat: {
+      title: 'Jahvat tulloo',
+      genre: ['Selviytyminen', 'First-Person', '3D'],
+      folder: 'jahvattulloo',
+      desc: 'Olet eksynyt trooppiselle saarelle ja aika käy vähiin. Vaella ensimmäisen persoonan näkymästä saariston läpi, etsi appelsiineja ja pidä nälkä loitolla. Mitä kauemmin selviät, sitä kiireellisemmäksi homma käy — saari ei anna armoa niille, jotka eivät liiku.',
+      controls: [
+        { key: 'WASD', action: 'Liikkuminen' },
+        { key: 'Hiiri', action: 'Katseensuunta' },
+        { key: 'Spacebar', action: 'Hyppäys' }
+      ]
+    },
+    ltdc: {
+      title: 'LTDC',
+      genre: ['Roguelike', '2D', 'Ammuskelu'],
+      folder: 'LTDC',
+      desc: 'LTDC on intensiivinen roguelike-ammuskelu, jossa jokainen pelikerta on erilainen. Taistele läpi satunnaisesti generoitujen aaltojen, kerää tehostuksia ja selviydy niin kauan kuin pystyt. Tarkka tähtäys ja nopeat reflexit ratkaisevat — jokainen kuolema on uusi alku.',
+      controls: [
+        { key: 'A / D', action: 'Liikkuminen' },
+        { key: 'Spacebar', action: 'Hyppäys' },
+        { key: 'Hiiri', action: 'Tähtäys' },
+        { key: 'Hiiren painike', action: 'Ampuminen' }
+      ]
+    },
+    rooffighter: {
+      title: 'Roof Fighter',
+      genre: ['Tappelupeli', 'Arcade', '2D', '2 pelaajaa'],
+      folder: 'rooffighter',
+      desc: 'Roof Fighter on arcadetyylinen 2D-tappelupeli, jossa kaksi pelaajaa kohtaa katon reunalla. Lyö, väistä ja torju vastustajasi hyökkäykset — viimeinen seisoja voittaa. Klassinen head-to-head-taistelu kahdelle pelaajalle samalla näppäimistöllä.',
+      controls: [
+        { key: 'A / D', action: 'Pelaaja 1 — liikkuminen' },
+        { key: 'C', action: 'Pelaaja 1 — hyppäys' },
+        { key: 'V', action: 'Pelaaja 1 — lyönti' },
+        { key: 'B', action: 'Pelaaja 1 — torjunta' },
+        { key: '← →', action: 'Pelaaja 2 — liikkuminen' },
+        { key: 'J', action: 'Pelaaja 2 — hyppäys' },
+        { key: 'K', action: 'Pelaaja 2 — lyönti' },
+        { key: 'L', action: 'Pelaaja 2 — torjunta' }
+      ]
+    }
+  };
+
+  let currentGame = null;
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.game-row').forEach(r => r.classList.remove('active'));
+  }
+
+  function showLibrary() {
+    showPage('page-library');
+    document.getElementById('game-iframe').src = '';
+  }
+
+  function showInfo(id) {
+    if (id) currentGame = id;
+    const g = games[currentGame];
+
+    // hero image — swap placeholder text for img when available
+    const hero = document.getElementById('info-hero');
+    // hero.innerHTML = `<img src="images/${currentGame}-hero.jpg" alt="${g.title}" style="width:100%;height:100%;object-fit:cover;">`;
+    hero.textContent = 'KUVA TULOSSA';
+
+    document.getElementById('info-title').textContent = g.title;
+
+    document.getElementById('info-tags').innerHTML =
+      g.genre.map(t => `<span class="tag">${t}</span>`).join('');
+
+    document.getElementById('info-desc').textContent = g.desc;
+
+    document.getElementById('info-controls').innerHTML =
+      g.controls.map(c =>
+        `<div class="controls-row"><span class="key">${c.key}</span><span class="controls-action">${c.action}</span></div>`
+      ).join('');
+
+    showPage('page-info');
+    document.querySelectorAll('.game-row').forEach(r => r.classList.remove('active'));
+    // highlight sidebar row
+    const rows = document.querySelectorAll('.game-row');
+    const idx = Object.keys(games).indexOf(currentGame);
+    if (rows[idx]) rows[idx].classList.add('active');
+  }
+
+  function playGame() {
+    const g = games[currentGame];
+    document.getElementById('game-title').textContent = g.title;
+    document.getElementById('game-iframe').src = `${g.folder}/index.html`;
+    showPage('page-game');
+  }
+</script>
+</body>
+</html>
