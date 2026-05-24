@@ -318,6 +318,23 @@
     }
     .controls-action { color: var(--steam-muted); font-size: 13px; }
 
+    .play-bar {
+      position: sticky;
+      bottom: 0;
+      background: var(--steam-darker);
+      border-top: 1px solid var(--steam-border);
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 10;
+    }
+    .play-bar-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--steam-text);
+    }
     .play-btn {
       display: inline-flex;
       align-items: center;
@@ -408,17 +425,18 @@
 
     <a class="game-row" onclick="showInfo('pakohuone')" href="#">
       <div class="game-row-thumb">
-        <!-- Korvaa src omalla capsule-kuvalla: images/pakohuone-capsule.jpg -->
-        <span>KUVA<br>TULOSSA</span>
+        <img src="images/pakohuone-hero.jpg" alt="Pakohuone">
       </div>
       <div class="game-row-info">
-        <div class="game-row-title">Pakohuone</div>
+        <div class="game-row-title">Pakohuone (BETA)</div>
         <div class="game-row-genre">Seikkailu</div>
       </div>
     </a>
 
     <a class="game-row" onclick="showInfo('egg')" href="#">
-      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-thumb">
+        <img src="images/egg-hero.jpg" alt="EGG">
+      </div>
       <div class="game-row-info">
         <div class="game-row-title">EGG</div>
         <div class="game-row-genre">Tasohyppely</div>
@@ -426,7 +444,9 @@
     </a>
 
     <a class="game-row" onclick="showInfo('jahvat')" href="#">
-      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-thumb">
+        <img src="images/jahvattulloo-hero.jpg" alt="Jahvat tulloo">
+      </div>
       <div class="game-row-info">
         <div class="game-row-title">Jahvat tulloo</div>
         <div class="game-row-genre">Selviytyminen</div>
@@ -434,7 +454,9 @@
     </a>
 
     <a class="game-row" onclick="showInfo('ltdc')" href="#">
-      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-thumb">
+        <img src="images/LTDC-hero.jpg" alt="LTDC">
+      </div>
       <div class="game-row-info">
         <div class="game-row-title">LTDC</div>
         <div class="game-row-genre">Roguelike</div>
@@ -442,7 +464,9 @@
     </a>
 
     <a class="game-row" onclick="showInfo('rooffighter')" href="#">
-      <div class="game-row-thumb"><span>KUVA<br>TULOSSA</span></div>
+      <div class="game-row-thumb">
+        <img src="images/rooffighter-hero.jpg" alt="Roof Fighter">
+      </div>
       <div class="game-row-info">
         <div class="game-row-title">Roof Fighter</div>
         <div class="game-row-genre">Tappelupeli</div>
@@ -462,15 +486,15 @@
       <div class="library-grid">
 
         <div class="library-card" onclick="showInfo('pakohuone')">
-          <div class="library-card-img">KUVA TULOSSA</div>
+          <img class="library-card-img" src="images/pakohuone-hero.jpg" alt="Pakohuone">
           <div class="library-card-body">
-            <div class="library-card-title">Pakohuone</div>
+            <div class="library-card-title">Pakohuone (BETA)</div>
             <div class="library-card-genre">Seikkailu</div>
           </div>
         </div>
 
         <div class="library-card" onclick="showInfo('egg')">
-          <div class="library-card-img">KUVA TULOSSA</div>
+          <img class="library-card-img" src="images/egg-hero.jpg" alt="EGG">
           <div class="library-card-body">
             <div class="library-card-title">EGG</div>
             <div class="library-card-genre">Tasohyppely</div>
@@ -478,7 +502,7 @@
         </div>
 
         <div class="library-card" onclick="showInfo('jahvat')">
-          <div class="library-card-img">KUVA TULOSSA</div>
+          <img class="library-card-img" src="images/jahvattulloo-hero.jpg" alt="Jahvat tulloo">
           <div class="library-card-body">
             <div class="library-card-title">Jahvat tulloo</div>
             <div class="library-card-genre">Selviytyminen</div>
@@ -486,7 +510,7 @@
         </div>
 
         <div class="library-card" onclick="showInfo('ltdc')">
-          <div class="library-card-img">KUVA TULOSSA</div>
+          <img class="library-card-img" src="images/LTDC-hero.jpg" alt="LTDC">
           <div class="library-card-body">
             <div class="library-card-title">LTDC</div>
             <div class="library-card-genre">Roguelike</div>
@@ -494,7 +518,7 @@
         </div>
 
         <div class="library-card" onclick="showInfo('rooffighter')">
-          <div class="library-card-img">KUVA TULOSSA</div>
+          <img class="library-card-img" src="images/rooffighter-hero.jpg" alt="Roof Fighter">
           <div class="library-card-body">
             <div class="library-card-title">Roof Fighter</div>
             <div class="library-card-genre">Tappelupeli</div>
@@ -511,11 +535,14 @@
         <button class="info-back" onclick="showLibrary()">&#8592; Takaisin kirjastoon</button>
         <div class="info-title" id="info-title"></div>
         <div class="info-tags" id="info-tags"></div>
-        <div class="info-desc" id="info-desc"></div>
         <div class="controls-box">
           <div class="controls-title">Ohjaus</div>
           <div class="controls-list" id="info-controls"></div>
         </div>
+        <div class="info-desc" id="info-desc"></div>
+      </div>
+      <div class="play-bar">
+        <span class="play-bar-title" id="play-bar-title"></span>
         <button class="play-btn" onclick="playGame()">&#9654; Pelaa nyt</button>
       </div>
     </div>
@@ -537,8 +564,9 @@
 <script>
   const games = {
     pakohuone: {
-      title: 'Pakohuone',
-      genre: ['Seikkailu', 'Point & Click'],
+      title: 'Pakohuone (BETA)',
+      heroImage: 'images/pakohuone-hero.jpg',
+      genre: ['Seikkailu', 'Point & Click', 'Beta'],
       folder: 'pakopeli',
       desc: 'Löydät itsesi lukitusta huoneesta ilman muistoja siitä, miten sinne päädyit. Tutki ympäristöäsi tarkasti, etsi vihjeitä ja ratkaise arvoituksia — ainoa tavoitteesi on päästä ulos. Peli on ensimmäisen persoonan point-and-click-seikkailu, jossa jokainen yksityiskohta saattaa olla avain vapauteen.',
       controls: [
@@ -547,6 +575,7 @@
     },
     egg: {
       title: 'EGG',
+      heroImage: 'images/egg-hero.jpg',
       genre: ['Tasohyppely', '2D', 'Speedrun'],
       folder: 'EGG',
       desc: 'EGG on vauhdikas 2D-tasohyppely, joka on suunniteltu nopeaa läpipeluuta ja speedrun-kisailua varten. Jokainen sekunti on tärkeä — hioa reittiäsi, opettele tasot ulkoa ja lyö ennätyksesi. Yksinkertainen ulkoasu piilottaa alleen tarkat kenttäsuunnitelmat, jotka palkitsevat harjoittelun.',
@@ -558,6 +587,7 @@
     },
     jahvat: {
       title: 'Jahvat tulloo',
+      heroImage: 'images/jahvattulloo-hero.jpg',
       genre: ['Selviytyminen', 'First-Person', '3D'],
       folder: 'jahvattulloo',
       desc: 'Olet eksynyt trooppiselle saarelle ja aika käy vähiin. Vaella ensimmäisen persoonan näkymästä saariston läpi, etsi appelsiineja ja pidä nälkä loitolla. Mitä kauemmin selviät, sitä kiireellisemmäksi homma käy — saari ei anna armoa niille, jotka eivät liiku.',
@@ -569,6 +599,7 @@
     },
     ltdc: {
       title: 'LTDC',
+      heroImage: 'images/LTDC-hero.jpg',
       genre: ['Roguelike', '2D', 'Ammuskelu'],
       folder: 'LTDC',
       desc: 'LTDC on intensiivinen roguelike-ammuskelu, jossa jokainen pelikerta on erilainen. Taistele läpi satunnaisesti generoitujen aaltojen, kerää tehostuksia ja selviydy niin kauan kuin pystyt. Tarkka tähtäys ja nopeat reflexit ratkaisevat — jokainen kuolema on uusi alku.',
@@ -581,6 +612,7 @@
     },
     rooffighter: {
       title: 'Roof Fighter',
+      heroImage: 'images/rooffighter-hero.jpg',
       genre: ['Tappelupeli', 'Arcade', '2D', '2 pelaajaa'],
       folder: 'rooffighter',
       desc: 'Roof Fighter on arcadetyylinen 2D-tappelupeli, jossa kaksi pelaajaa kohtaa katon reunalla. Lyö, väistä ja torju vastustajasi hyökkäykset — viimeinen seisoja voittaa. Klassinen head-to-head-taistelu kahdelle pelaajalle samalla näppäimistöllä.',
@@ -615,12 +647,11 @@
     if (id) currentGame = id;
     const g = games[currentGame];
 
-    // hero image — swap placeholder text for img when available
     const hero = document.getElementById('info-hero');
-    // hero.innerHTML = `<img src="images/${currentGame}-hero.jpg" alt="${g.title}" style="width:100%;height:100%;object-fit:cover;">`;
-    hero.textContent = 'KUVA TULOSSA';
+    hero.innerHTML = `<img src="${g.heroImage}" alt="${g.title}" style="width:100%;height:100%;object-fit:cover;">`;
 
     document.getElementById('info-title').textContent = g.title;
+    document.getElementById('play-bar-title').textContent = g.title;
 
     document.getElementById('info-tags').innerHTML =
       g.genre.map(t => `<span class="tag">${t}</span>`).join('');
