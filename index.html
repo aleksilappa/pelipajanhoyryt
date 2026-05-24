@@ -400,7 +400,18 @@
       display: block;
     }
 
-    /* scrollbar */
+    #page-info {
+      display: none;
+      flex-direction: column;
+      height: calc(100vh - 90px);
+    }
+    #page-info.active {
+      display: flex;
+    }
+    #page-info .info-scroll {
+      flex: 1;
+      overflow-y: auto;
+    }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--steam-darker); }
     ::-webkit-scrollbar-thumb { background: var(--steam-blue-dim); border-radius: 3px; }
@@ -530,16 +541,18 @@
 
     <!-- PAGE: INFO -->
     <div class="page" id="page-info">
-      <div class="info-hero-img" id="info-hero">KUVA TULOSSA</div>
-      <div class="info-body">
-        <button class="info-back" onclick="showLibrary()">&#8592; Takaisin kirjastoon</button>
-        <div class="info-title" id="info-title"></div>
-        <div class="info-tags" id="info-tags"></div>
-        <div class="controls-box">
-          <div class="controls-title">Ohjaus</div>
-          <div class="controls-list" id="info-controls"></div>
+      <div class="info-scroll">
+        <div class="info-hero-img" id="info-hero">KUVA TULOSSA</div>
+        <div class="info-body">
+          <button class="info-back" onclick="showLibrary()">&#8592; Takaisin kirjastoon</button>
+          <div class="info-title" id="info-title"></div>
+          <div class="info-tags" id="info-tags"></div>
+          <div class="controls-box">
+            <div class="controls-title">Ohjaus</div>
+            <div class="controls-list" id="info-controls"></div>
+          </div>
+          <div class="info-desc" id="info-desc"></div>
         </div>
-        <div class="info-desc" id="info-desc"></div>
       </div>
       <div class="play-bar">
         <span class="play-bar-title" id="play-bar-title"></span>
