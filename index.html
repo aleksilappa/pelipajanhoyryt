@@ -611,6 +611,7 @@
   }
 
   function showInfo(id) {
+    document.getElementById('game-iframe').src = '';
     if (id) currentGame = id;
     const g = games[currentGame];
 
