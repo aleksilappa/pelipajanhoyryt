@@ -399,6 +399,17 @@
       border: none;
       display: block;
     }
+    /* Scratch-upotus: pidetään soittimen kuvasuhde (485x402), musta tausta jää reunoille */
+    .game-frame-wrap.scratch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .game-frame-wrap.scratch iframe {
+      height: 100%;
+      width: calc((100vh - 114px) * 485 / 402);
+      max-width: 100%;
+    }
 
     #page-info {
       display: none;
@@ -718,6 +729,7 @@
     document.getElementById('game-title').textContent = g.title;
     // Scratch-pelit upotetaan embedUrl:lla, Unity-pelit omasta kansiosta
     document.getElementById('game-iframe').src = g.embedUrl || `${g.folder}/index.html`;
+    document.querySelector('.game-frame-wrap').classList.toggle('scratch', !!g.embedUrl);
     showPage('page-game');
   }
 </script>
