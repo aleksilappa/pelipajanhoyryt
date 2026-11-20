@@ -432,7 +432,7 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-header">Pelikirjasto &mdash; 5 peliä</div>
+    <div class="sidebar-header">Pelikirjasto &mdash; 6 peliä</div>
 
     <a class="game-row" onclick="showInfo('pakohuone')" href="#">
       <div class="game-row-thumb">
@@ -481,6 +481,16 @@
       <div class="game-row-info">
         <div class="game-row-title">Roof Fighter</div>
         <div class="game-row-genre">Tappelupeli</div>
+      </div>
+    </a>
+
+    <a class="game-row" onclick="showInfo('ladder')" href="#">
+      <div class="game-row-thumb">
+        <img src="images/laddersplatter-hero.jpg" alt="Ladder Splatter">
+      </div>
+      <div class="game-row-info">
+        <div class="game-row-title">Ladder Splatter</div>
+        <div class="game-row-genre">Arcade</div>
       </div>
     </a>
   </aside>
@@ -536,6 +546,14 @@
           </div>
         </div>
 
+        <div class="library-card" onclick="showInfo('ladder')">
+          <img class="library-card-img" src="images/laddersplatter-hero.jpg" alt="Ladder Splatter">
+          <div class="library-card-body">
+            <div class="library-card-title">Ladder Splatter</div>
+            <div class="library-card-genre">Arcade</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -567,7 +585,7 @@
         <span class="game-topbar-title" id="game-title"></span>
       </div>
       <div class="game-frame-wrap">
-        <iframe id="game-iframe" src="" allowfullscreen></iframe>
+        <iframe id="game-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe>
       </div>
     </div>
 
@@ -640,6 +658,16 @@
         { key: 'K', action: 'Pelaaja 2 — lyönti' },
         { key: 'L', action: 'Pelaaja 2 — torjunta' }
       ]
+    },
+    ladder: {
+      title: 'Ladder Splatter',
+      heroImage: 'images/laddersplatter-hero.jpg',
+      genre: ['Arcade', '2D', 'Scratch'],
+      embedUrl: 'https://scratch.mit.edu/projects/1442635787/embed',
+      desc: 'Kissa juoksee ylös tikapuita, mutta katolta tippuu sipuleita ja vihaisia kiviä! Kuinka korkealle ehdit kiivetä?',
+      controls: [
+        { key: '← →', action: 'Liikkuminen vasemmalle ja oikealle' }
+      ]
     }
   };
 
@@ -688,7 +716,8 @@
   function playGame() {
     const g = games[currentGame];
     document.getElementById('game-title').textContent = g.title;
-    document.getElementById('game-iframe').src = `${g.folder}/index.html`;
+    // Scratch-pelit upotetaan embedUrl:lla, Unity-pelit omasta kansiosta
+    document.getElementById('game-iframe').src = g.embedUrl || `${g.folder}/index.html`;
     showPage('page-game');
   }
 </script>
